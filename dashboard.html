@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Dashboard</title>
+  <title>Bus Tracker - Dashboard</title>
   <link rel="stylesheet" href="style.css">
   <script defer src="script.js"></script>
   <!-- Font Awesome for icons -->
@@ -14,8 +14,6 @@
   <!-- Leaflet for maps -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-  <!-- Chart.js for analytics -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
 </head>
 <body class="dashboard-body">
   <!-- Language Selector -->
@@ -31,26 +29,23 @@
     <!-- Sidebar -->
     <aside class="sidebar" id="sidebar">
       <div class="sidebar-header">
-        <span data-translate="admin_panel">Admin Panel</span>
+        <span data-translate="bus_tracker">Bus Tracker</span>
       </div>
       <nav class="sidebar-nav">
         <a href="#" onclick="showPage('dashboard')" class="active" data-translate="dashboard">
           <i class="fa-solid fa-tachometer-alt"></i> Dashboard
         </a>
-        <a href="#" onclick="showPage('routes')" data-translate="routes">
-          <i class="fa-solid fa-route"></i> Routes
-        </a>
         <a href="#" onclick="showPage('tracking')" data-translate="live_tracking">
           <i class="fa-solid fa-map-marker-alt"></i> Live Tracking
         </a>
-        <a href="analytic.html" data-translate="analytics">
-          <i class="fa-solid fa-chart-line"></i> Analytics
-        </a>
-        <a href="#" onclick="showPage('complaints')" data-translate="complaints">
-          <i class="fa-solid fa-bullhorn"></i> Complaints
+        <a href="#" onclick="showPage('alerts')" data-translate="alerts">
+          <i class="fa-solid fa-bell"></i> Alerts & Notifications
         </a>
         <a href="lostandfound.html" data-translate="lost_found">
-          <i class="fa-solid fa-bag-shopping"></i> Lost & Found
+          <i class="fa-solid fa-search"></i> Lost & Found
+        </a>
+        <a href="#" onclick="showPage('emergency')" data-translate="emergency">
+          <i class="fa-solid fa-exclamation-triangle"></i> Emergency Support
         </a>
         <a href="#" onclick="showPage('settings')" data-translate="settings">
           <i class="fa-solid fa-gear"></i> Settings
@@ -78,29 +73,33 @@
       <div class="content-area">
         <!-- Dashboard Page -->
         <div id="dashboardPage" class="page active">
-          <!-- Cards -->
-          <div class="cards">
-            <div class="card">
-              <h3 data-translate="active_buses">Active Buses</h3>
-              <p class="card-value text-indigo" id="activeBuses">42</p>
+          <!-- Quick Stats -->
+          <div class="stats-grid">
+            <div class="stat-card">
+              <i class="fas fa-bus"></i>
+              <h3 id="nearbyBuses">8</h3>
+              <p data-translate="nearby_buses">Nearby Buses</p>
             </div>
-            <div class="card">
-              <h3 data-translate="alerts">Alerts</h3>
-              <p class="card-value text-red" id="totalAlerts">5</p>
+            <div class="stat-card">
+              <i class="fas fa-clock"></i>
+              <h3 id="avgWaitTime">5m</h3>
+              <p data-translate="avg_wait">Avg Wait Time</p>
             </div>
-            <div class="card">
-              <h3 data-translate="passengers_today">Passengers Today</h3>
-              <p class="card-value text-green" id="passengersToday">1,284</p>
+            <div class="stat-card">
+              <i class="fas fa-route"></i>
+              <h3 id="totalRoutes">28</h3>
+              <p data-translate="total_routes">Available Routes</p>
             </div>
-            <div class="card">
-              <h3 data-translate="total_routes">Total Routes</h3>
-              <p class="card-value" id="totalRoutes">28</p>
+            <div class="stat-card">
+              <i class="fas fa-bell"></i>
+              <h3 id="activeAlerts">2</h3>
+              <p data-translate="active_alerts">Active Alerts</p>
             </div>
           </div>
 
           <!-- Route Finder -->
           <div class="route-finder">
-            <h3 data-translate="find_routes" style="margin-bottom: 20px;">Find Bus Routes</h3>
+            <h3 data-translate="find_routes" style="margin-bottom: 20px;">Find Your Route</h3>
             <div class="route-inputs">
               <div class="input-group-route">
                 <label data-translate="from">From</label>
@@ -142,20 +141,6 @@
               <!-- Bus results will be populated here -->
             </div>
           </div>
-
-          <!-- Quick Actions -->
-          <h2 class="section-title" data-translate="quick_actions">Quick Actions</h2>
-          <div class="actions">
-            <button class="btn btn-primary" onclick="showAddRouteModal()">
-              <i class="fa-solid fa-plus"></i> <span data-translate="add_route">Add/Edit Route</span>
-            </button>
-            <button class="btn btn-warning" onclick="showAlertModal()">
-              <i class="fa-solid fa-triangle-exclamation"></i> <span data-translate="send_alert">Send Alert</span>
-            </button>
-            <button class="btn btn-danger" onclick="showEmergencyModal()">
-              <i class="fa-solid fa-siren-on"></i> <span data-translate="check_emergency">Check Emergency</span>
-            </button>
-          </div>
         </div>
 
         <!-- Live Tracking Page -->
@@ -171,28 +156,46 @@
           </div>
         </div>
 
-        <!-- Routes Management Page -->
-        <div id="routesPage" class="page">
+        <!-- Alerts Page -->
+        <div id="alertsPage" class="page">
           <div class="form-card">
-            <h2 data-translate="route_management">Route Management</h2>
-            <div class="search-bar">
-              <input type="text" id="routeSearch" data-translate-placeholder="search_routes" placeholder="Search routes...">
-              <button class="search-btn" onclick="searchRoutes()">
-                <i class="fas fa-search"></i>
-              </button>
-            </div>
-            <div class="items" id="routesList">
-              <!-- Routes will be populated here -->
+            <h2 data-translate="notifications">Notifications & Alerts</h2>
+            <div class="items" id="alertsList">
+              <!-- Alerts will be populated here -->
             </div>
           </div>
         </div>
 
-        <!-- Complaints Page -->
-        <div id="complaintsPage" class="page">
+        <!-- Emergency Page -->
+        <div id="emergencyPage" class="page">
           <div class="form-card">
-            <h2 data-translate="complaints_management">Complaints Management</h2>
-            <div class="items" id="complaintsList">
-              <!-- Complaints will be populated here -->
+            <h2 data-translate="emergency_support">Emergency Support</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-top: 20px;">
+              <button class="btn btn-danger" onclick="reportEmergency('medical')" style="padding: 20px; display: flex; flex-direction: column; align-items: center;">
+                <i class="fas fa-ambulance" style="font-size: 30px; margin-bottom: 10px;"></i>
+                <span data-translate="medical_emergency">Medical Emergency</span>
+              </button>
+              <button class="btn" style="background: #fd7e14; padding: 20px; display: flex; flex-direction: column; align-items: center;" onclick="reportEmergency('fire')">
+                <i class="fas fa-fire" style="font-size: 30px; margin-bottom: 10px;"></i>
+                <span data-translate="fire_emergency">Fire Emergency</span>
+              </button>
+              <button class="btn" style="background: #6f42c1; padding: 20px; display: flex; flex-direction: column; align-items: center;" onclick="reportEmergency('security')">
+                <i class="fas fa-shield-alt" style="font-size: 30px; margin-bottom: 10px;"></i>
+                <span data-translate="security_issue">Security Issue</span>
+              </button>
+              <button class="btn" style="background: #20c997; padding: 20px; display: flex; flex-direction: column; align-items: center;" onclick="reportEmergency('breakdown')">
+                <i class="fas fa-tools" style="font-size: 30px; margin-bottom: 10px;"></i>
+                <span data-translate="bus_breakdown">Bus Breakdown</span>
+              </button>
+            </div>
+            <div style="margin-top: 30px; padding: 20px; background: #f8f9fa; border-radius: 10px;">
+              <h4 data-translate="emergency_contacts">Emergency Contacts</h4>
+              <div style="margin-top: 10px;">
+                <p><strong data-translate="police">Police:</strong> 100</p>
+                <p><strong data-translate="ambulance">Ambulance:</strong> 108</p>
+                <p><strong data-translate="fire_dept">Fire Department:</strong> 101</p>
+                <p><strong data-translate="bus_helpline">Bus Helpline:</strong> 1800-XXX-XXXX</p>
+              </div>
             </div>
           </div>
         </div>
@@ -200,41 +203,44 @@
         <!-- Settings Page -->
         <div id="settingsPage" class="page">
           <div class="form-card">
-            <h2 data-translate="admin_settings">Admin Settings</h2>
+            <h2 data-translate="user_settings">User Settings</h2>
             <div class="form-group">
-              <label data-translate="notification_settings">Notification Settings</label>
+              <label data-translate="notification_preferences">Notification Preferences</label>
               <div style="margin-top: 10px;">
                 <label style="display: flex; align-items: center; margin-bottom: 10px;">
-                  <input type="checkbox" id="emergencyNotif" checked style="margin-right: 10px;">
-                  <span data-translate="emergency_alerts">Emergency alerts</span>
+                  <input type="checkbox" id="busArrivalNotif" checked style="margin-right: 10px;">
+                  <span data-translate="bus_arrival_notifications">Bus arrival notifications</span>
                 </label>
                 <label style="display: flex; align-items: center; margin-bottom: 10px;">
-                  <input type="checkbox" id="routeUpdates" checked style="margin-right: 10px;">
-                  <span data-translate="route_updates">Route updates</span>
+                  <input type="checkbox" id="routeChangeNotif" checked style="margin-right: 10px;">
+                  <span data-translate="route_change_alerts">Route change alerts</span>
                 </label>
                 <label style="display: flex; align-items: center;">
-                  <input type="checkbox" id="systemAlerts" style="margin-right: 10px;">
-                  <span data-translate="system_alerts">System alerts</span>
+                  <input type="checkbox" id="hapticFeedback" style="margin-right: 10px;">
+                  <span data-translate="haptic_feedback">Haptic feedback alerts</span>
                 </label>
               </div>
             </div>
             <div class="form-group">
-              <label data-translate="update_interval">Update Interval (seconds)</label>
-              <select style="width: 200px; padding: 10px; border: 1px solid #e0e0e0; border-radius: 5px;">
-                <option value="5">5 seconds</option>
-                <option value="10" selected>10 seconds</option>
-                <option value="30">30 seconds</option>
-                <option value="60">1 minute</option>
-              </select>
+              <label data-translate="preferred_routes">Preferred Routes</label>
+              <input type="text" id="preferredRoutes" placeholder="e.g., 105, 120, 89" style="margin-top: 10px;">
             </div>
-            <button class="submit-btn" data-translate="save_settings">Save Settings</button>
+            <div class="form-group">
+              <label data-translate="home_location">Home Location</label>
+              <input type="text" id="homeLocation" placeholder="Enter your home address" style="margin-top: 10px;">
+            </div>
+            <div class="form-group">
+              <label data-translate="work_location">Work Location</label>
+              <input type="text" id="workLocation" placeholder="Enter your work address" style="margin-top: 10px;">
+            </div>
+            <button class="submit-btn" onclick="saveSettings()" data-translate="save_settings">Save Settings</button>
           </div>
         </div>
       </div>
     </main>
 
     <!-- Voice Assistant Button -->
-    <button id="voice-btn" class="voice-button-admin" onclick="toggleVoiceAssistant()">
+    <button id="voice-btn" class="voice-button-admin" onclick="toggleVoiceAssistant()" style="left: 20px;">
       <i class="fa-solid fa-microphone"></i>
     </button>
   </div>
@@ -256,59 +262,28 @@
     </div>
   </div>
 
-  <!-- Modals for Actions -->
-  <div id="addRouteModal" class="auth-modal">
-    <div class="auth-modal-content">
-      <div class="auth-modal-header">
-        <h3 data-translate="add_route">Add Route</h3>
-        <span class="close" onclick="closeAddRouteModal()">&times;</span>
-      </div>
-      <div class="auth-modal-body">
-        <div class="form-group">
-          <label data-translate="route_number">Route Number</label>
-          <input type="text" id="routeNumber" placeholder="e.g., 105">
-        </div>
-        <div class="form-group">
-          <label data-translate="route_name">Route Name</label>
-          <input type="text" id="routeName" placeholder="e.g., ISBT to Connaught Place">
-        </div>
-        <div class="form-group">
-          <label data-translate="start_point">Start Point</label>
-          <input type="text" id="startPoint" placeholder="Starting location">
-        </div>
-        <div class="form-group">
-          <label data-translate="end_point">End Point</label>
-          <input type="text" id="endPoint" placeholder="End location">
-        </div>
-        <button class="btn btn-primary" onclick="addRoute()" data-translate="add_route">Add Route</button>
-      </div>
-    </div>
-  </div>
-
   <script>
     let map, trackingMap;
     let currentUser = null;
     let buses = [];
-    let routes = [];
     let currentPage = 'dashboard';
 
     // Language translations
     const translations = {
       en: {
-        admin_panel: "Admin Panel",
+        bus_tracker: "Bus Tracker",
         dashboard: "Dashboard",
-        routes: "Routes",
         live_tracking: "Live Tracking",
-        analytics: "Analytics",
-        complaints: "Complaints",
+        alerts: "Alerts & Notifications",
         lost_found: "Lost & Found",
+        emergency: "Emergency Support",
         settings: "Settings",
         logout: "Log Out",
-        active_buses: "Active Buses",
-        alerts: "Alerts",
-        passengers_today: "Passengers Today",
-        total_routes: "Total Routes",
-        find_routes: "Find Bus Routes",
+        nearby_buses: "Nearby Buses",
+        avg_wait: "Avg Wait Time",
+        total_routes: "Available Routes",
+        active_alerts: "Active Alerts",
+        find_routes: "Find Your Route",
         from: "From",
         to: "To",
         search: "Search",
@@ -318,82 +293,59 @@
         medium_crowd: "Medium Crowd",
         high_crowd: "High Crowd",
         available_routes: "Available Routes",
-        quick_actions: "Quick Actions",
-        add_route: "Add/Edit Route",
-        send_alert: "Send Alert",
-        check_emergency: "Check Emergency",
         live_buses: "Live Bus Locations",
-        route_management: "Route Management",
-        search_routes: "Search routes...",
-        complaints_management: "Complaints Management",
-        admin_settings: "Admin Settings",
-        notification_settings: "Notification Settings",
-        emergency_alerts: "Emergency alerts",
-        route_updates: "Route updates",
-        system_alerts: "System alerts",
-        update_interval: "Update Interval (seconds)",
+        notifications: "Notifications & Alerts",
+        emergency_support: "Emergency Support",
+        medical_emergency: "Medical Emergency",
+        fire_emergency: "Fire Emergency",
+        security_issue: "Security Issue",
+        bus_breakdown: "Bus Breakdown",
+        emergency_contacts: "Emergency Contacts",
+        police: "Police",
+        ambulance: "Ambulance",
+        fire_dept: "Fire Department",
+        bus_helpline: "Bus Helpline",
+        user_settings: "User Settings",
+        notification_preferences: "Notification Preferences",
+        bus_arrival_notifications: "Bus arrival notifications",
+        route_change_alerts: "Route change alerts",
+        haptic_feedback: "Haptic feedback alerts",
+        preferred_routes: "Preferred Routes",
+        home_location: "Home Location",
+        work_location: "Work Location",
         save_settings: "Save Settings",
         voice_assistant: "Voice Assistant",
-        click_speak: "Click and speak...",
-        route_number: "Route Number",
-        route_name: "Route Name",
-        start_point: "Start Point",
-        end_point: "End Point"
+        click_speak: "Click and speak..."
       },
       hi: {
-        admin_panel: "एडमिन पैनल",
+        bus_tracker: "बस ट्रैकर",
         dashboard: "डैशबोर्ड",
-        routes: "रूट",
         live_tracking: "लाइव ट्रैकिंग",
-        analytics: "एनालिटिक्स",
-        complaints: "शिकायतें",
+        alerts: "अलर्ट और सूचनाएं",
         lost_found: "खोया और मिला",
+        emergency: "आपातकालीन सहायता",
         settings: "सेटिंग्स",
         logout: "लॉग आउट",
-        active_buses: "सक्रिय बसें",
-        alerts: "अलर्ट",
-        passengers_today: "आज के यात्री",
-        total_routes: "कुल रूट",
-        find_routes: "बस रूट खोजें",
+        nearby_buses: "नजदीकी बसें",
+        avg_wait: "औसत प्रतीक्षा समय",
+        total_routes: "उपलब्ध रूट",
+        active_alerts: "सक्रिय अलर्ट",
+        find_routes: "अपना रूट खोजें",
         from: "से",
         to: "तक",
         search: "खोजें",
-        enter_start: "शुरुआती स्थान दर्ज करें",
-        enter_dest: "गंतव्य दर्ज करें",
-        low_crowd: "कम भीड़",
-        medium_crowd: "मध्यम भीड़",
-        high_crowd: "अधिक भीड़",
-        available_routes: "उपलब्ध रूट",
-        quick_actions: "त्वरित कार्य",
-        add_route: "रूट जोड़ें/संपादित करें",
-        send_alert: "अलर्ट भेजें",
-        check_emergency: "आपातकाल जांचें",
-        live_buses: "लाइव बस लोकेशन",
-        route_management: "रूट प्रबंधन",
-        search_routes: "रूट खोजें...",
-        complaints_management: "शिकायत प्रबंधन",
-        admin_settings: "एडमिन सेटिंग्स",
         voice_assistant: "वॉयस असिस्टेंट",
         click_speak: "क्लिक करें और बोलें..."
       },
       pa: {
-        admin_panel: "ਐਡਮਿਨ ਪੈਨਲ",
+        bus_tracker: "ਬੱਸ ਟਰੈਕਰ",
         dashboard: "ਡੈਸ਼ਬੋਰਡ",
-        routes: "ਰੂਟ",
         live_tracking: "ਲਾਈਵ ਟਰੈਕਿੰਗ",
-        analytics: "ਵਿਸ਼ਲੇਸ਼ਣ",
-        complaints: "ਸ਼ਿਕਾਇਤਾਂ",
+        alerts: "ਚੇਤਾਵਨੀਆਂ ਅਤੇ ਸੂਚਨਾਵਾਂ",
         lost_found: "ਗੁਆਚਿਆ ਅਤੇ ਮਿਲਿਆ",
+        emergency: "ਐਮਰਜੈਂਸੀ ਸਹਾਇਤਾ",
         settings: "ਸੈਟਿੰਗਜ਼",
         logout: "ਲੌਗ ਆਉਟ",
-        active_buses: "ਸਕਿਰਿਆ ਬੱਸਾਂ",
-        alerts: "ਚੇਤਾਵਨੀਆਂ",
-        passengers_today: "ਅੱਜ ਦੇ ਯਾਤਰੀ",
-        total_routes: "ਕੁੱਲ ਰੂਟ",
-        find_routes: "ਬੱਸ ਰੂਟ ਲੱਭੋ",
-        from: "ਤੋਂ",
-        to: "ਤੱਕ",
-        search: "ਖੋਜੋ",
         voice_assistant: "ਵੌਇਸ ਸਹਾਇਕ",
         click_speak: "ਕਲਿੱਕ ਕਰੋ ਅਤੇ ਬੋਲੋ..."
       }
@@ -410,7 +362,7 @@
 
     function checkAuthStatus() {
       const savedUser = JSON.parse(sessionStorage.getItem('currentUser') || 'null');
-      if (!savedUser || savedUser.type !== 'admin') {
+      if (!savedUser || savedUser.type !== 'commuter') {
         window.location.href = 'login.html';
         return;
       }
@@ -463,6 +415,21 @@
         
         addSampleBuses();
       }
+
+      // Get user location if available
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+          const lat = position.coords.latitude;
+          const lng = position.coords.longitude;
+          
+          if (map) {
+            map.setView([lat, lng], 14);
+            L.marker([lat, lng]).addTo(map)
+              .bindPopup('Your current location')
+              .openPopup();
+          }
+        });
+      }
     }
 
     function initializeTrackingMap() {
@@ -480,10 +447,11 @@
 
     function addSampleBuses(mapInstance = map) {
       const sampleBuses = [
-        { id: 'B001', route: '105', lat: 28.6139, lng: 77.2090, passengers: 45, capacity: 60 },
-        { id: 'B002', route: '120', lat: 28.6289, lng: 77.2065, passengers: 38, capacity: 50 },
-        { id: 'B003', route: '89', lat: 28.6089, lng: 77.2190, passengers: 52, capacity: 60 },
-        { id: 'B004', route: '205', lat: 28.6189, lng: 77.1990, passengers: 25, capacity: 45 }
+        { id: 'B001', route: '105', lat: 28.6139, lng: 77.2090, passengers: 45, capacity: 60, eta: '5 min' },
+        { id: 'B002', route: '120', lat: 28.6289, lng: 77.2065, passengers: 38, capacity: 50, eta: '12 min' },
+        { id: 'B003', route: '89', lat: 28.6089, lng: 77.2190, passengers: 52, capacity: 60, eta: '8 min' },
+        { id: 'B004', route: '205', lat: 28.6189, lng: 77.1990, passengers: 25, capacity: 45, eta: '15 min' },
+        { id: 'B005', route: '78', lat: 28.6339, lng: 77.2140, passengers: 30, capacity: 55, eta: '3 min' }
       ];
 
       sampleBuses.forEach(bus => {
@@ -493,7 +461,7 @@
         else if (crowdLevel > 0.5) color = '#ffcdd2'; // Medium red for medium crowd
 
         const marker = L.circleMarker([bus.lat, bus.lng], {
-          radius: 8,
+          radius: 10,
           fillColor: color,
           color: '#c62828',
           weight: 2,
@@ -502,10 +470,13 @@
         }).addTo(mapInstance);
 
         marker.bindPopup(`
-          <strong>Bus ${bus.route}</strong><br>
-          ID: ${bus.id}<br>
-          Passengers: ${bus.passengers}/${bus.capacity}<br>
-          Status: Active
+          <div style="text-align: center;">
+            <strong>🚌 Bus ${bus.route}</strong><br>
+            <strong>ID:</strong> ${bus.id}<br>
+            <strong>Passengers:</strong> ${bus.passengers}/${bus.capacity}<br>
+            <strong>ETA:</strong> ${bus.eta}<br>
+            <strong>Status:</strong> <span style="color: green;">Active</span>
+          </div>
         `);
       });
 
@@ -515,25 +486,41 @@
     function loadMockData() {
       // Update dashboard stats
       updateDashboardStats();
-      
-      // Load routes data
-      routes = [
-        { number: '105', name: 'ISBT to Connaught Place', start: 'ISBT', end: 'Connaught Place' },
-        { number: '120', name: 'Red Fort to India Gate', start: 'Red Fort', end: 'India Gate' },
-        { number: '89', name: 'Karol Bagh to Lajpat Nagar', start: 'Karol Bagh', end: 'Lajpat Nagar' }
-      ];
-
-      loadRoutesList();
-      loadComplaintsList();
+      loadAlertsList();
     }
 
     function updateDashboardStats() {
       // Simulate real-time updates
       setInterval(() => {
-        document.getElementById('activeBuses').textContent = Math.floor(Math.random() * 20) + 35;
-        document.getElementById('totalAlerts').textContent = Math.floor(Math.random() * 10) + 3;
-        document.getElementById('passengersToday').textContent = (Math.floor(Math.random() * 500) + 1000) + ',000';
-      }, 10000);
+        document.getElementById('nearbyBuses').textContent = Math.floor(Math.random() * 5) + 6;
+        document.getElementById('avgWaitTime').textContent = Math.floor(Math.random() * 8) + 3 + 'm';
+        document.getElementById('activeAlerts').textContent = Math.floor(Math.random() * 4) + 1;
+      }, 15000);
+    }
+
+    function loadAlertsList() {
+      const mockAlerts = [
+        { id: 1, title: 'Route 105 - 10 min delay due to traffic', type: 'warning', time: '5 min ago' },
+        { id: 2, title: 'Route 120 - Service resumed normally', type: 'success', time: '15 min ago' },
+        { id: 3, title: 'Heavy rain alert - Expect delays', type: 'info', time: '1 hour ago' },
+        { id: 4, title: 'Route 89 - Temporary stop closure at Mall Road', type: 'warning', time: '2 hours ago' }
+      ];
+
+      const alertsHtml = mockAlerts.map(alert => `
+        <div class="item">
+          <div>
+            <div class="item-title">${alert.title}</div>
+            <div class="item-sub">${alert.time}</div>
+          </div>
+          <div class="status ${alert.type}" style="padding: 5px 10px; font-size: 12px;">
+            ${alert.type.toUpperCase()}
+          </div>
+        </div>
+      `).join('');
+
+      if (document.getElementById('alertsList')) {
+        document.getElementById('alertsList').innerHTML = alertsHtml;
+      }
     }
 
     function showPage(page) {
@@ -553,9 +540,9 @@
       // Update page title
       const pageTitles = {
         'dashboard': translations[document.getElementById('languageSelect').value]?.dashboard || 'Dashboard',
-        'routes': translations[document.getElementById('languageSelect').value]?.routes || 'Routes',
         'tracking': translations[document.getElementById('languageSelect').value]?.live_tracking || 'Live Tracking',
-        'complaints': translations[document.getElementById('languageSelect').value]?.complaints || 'Complaints',
+        'alerts': translations[document.getElementById('languageSelect').value]?.alerts || 'Alerts & Notifications',
+        'emergency': translations[document.getElementById('languageSelect').value]?.emergency || 'Emergency Support',
         'settings': translations[document.getElementById('languageSelect').value]?.settings || 'Settings'
       };
       document.getElementById('pageTitle').textContent = pageTitles[page] || 'Dashboard';
@@ -569,8 +556,8 @@
     }
 
     function searchRoutes() {
-      const from = document.getElementById('fromLocation').value;
-      const to = document.getElementById('toLocation').value;
+      const from = document.getElementById('fromLocation').value.trim();
+      const to = document.getElementById('toLocation').value.trim();
 
       if (!from || !to) {
         alert('Please enter both starting location and destination');
@@ -581,12 +568,47 @@
       document.getElementById('busResults').style.display = 'block';
       document.getElementById('busResultsList').innerHTML = '<div style="padding: 20px; text-align: center;"><div class="loading"></div> Searching routes...</div>';
 
-      // Simulate API call
+      // Sample stations for demonstration
+      const sampleStations = [
+        'ISBT Kashmere Gate', 'Red Fort', 'Chandni Chowk', 'New Delhi Railway Station',
+        'Connaught Place', 'India Gate', 'Khan Market', 'Lajpat Nagar',
+        'Nehru Place', 'Karol Bagh', 'Rajouri Garden', 'Janakpuri',
+        'Dwarka', 'Gurgaon', 'Noida City Centre', 'Akshardham'
+      ];
+
+      // Simulate API call with realistic data
       setTimeout(() => {
         const mockResults = [
-          { route: '105', from: from, to: to, eta: '12 min', duration: '35 min', crowd: 'low' },
-          { route: '120', from: from, to: to, eta: '8 min', duration: '28 min', crowd: 'medium' },
-          { route: '89', from: from, to: to, eta: '15 min', duration: '42 min', crowd: 'high' }
+          { 
+            route: '105', 
+            from: from, 
+            to: to, 
+            eta: '12 min', 
+            duration: '35 min', 
+            crowd: 'low',
+            stops: ['ISBT', 'Red Fort', 'Connaught Place', 'India Gate'],
+            fare: '₹15'
+          },
+          { 
+            route: '120', 
+            from: from, 
+            to: to, 
+            eta: '8 min', 
+            duration: '28 min', 
+            crowd: 'medium',
+            stops: ['Karol Bagh', 'Connaught Place', 'Khan Market', 'Lajpat Nagar'],
+            fare: '₹12'
+          },
+          { 
+            route: '89', 
+            from: from, 
+            to: to, 
+            eta: '15 min', 
+            duration: '42 min', 
+            crowd: 'high',
+            stops: ['Dwarka', 'Janakpuri', 'Karol Bagh', 'Connaught Place'],
+            fare: '₹18'
+          }
         ];
 
         displayBusResults(mockResults);
@@ -595,20 +617,47 @@
 
     function displayBusResults(results) {
       const resultsHtml = results.map(bus => `
-        <div class="bus-result-item">
+        <div class="bus-result-item" onclick="showRouteDetails('${bus.route}')" style="cursor: pointer;">
           <div class="bus-info">
             <h4>Route ${bus.route}</h4>
             <p>${bus.from} → ${bus.to}</p>
+            <p><strong>Fare:</strong> ${bus.fare}</p>
             <span class="crowd-indicator crowd-${bus.crowd}">${bus.crowd.toUpperCase()} CROWD</span>
           </div>
           <div class="bus-timing">
             <div class="eta">${bus.eta}</div>
             <p>Journey: ${bus.duration}</p>
+            <small>Click for route details</small>
           </div>
         </div>
       `).join('');
 
       document.getElementById('busResultsList').innerHTML = resultsHtml;
+    }
+
+    function showRouteDetails(routeNumber) {
+      const routeInfo = {
+        '105': {
+          stops: ['ISBT Kashmere Gate', 'Red Fort', 'Chandni Chowk', 'New Delhi Station', 'Connaught Place', 'India Gate'],
+          timings: ['6:00 AM', '6:15 AM', '6:30 AM', '6:45 AM', '7:00 AM', '7:15 AM'],
+          frequency: 'Every 15 minutes'
+        },
+        '120': {
+          stops: ['Karol Bagh', 'Patel Nagar', 'Connaught Place', 'Khan Market', 'Lodi Road', 'Lajpat Nagar'],
+          timings: ['6:05 AM', '6:20 AM', '6:35 AM', '6:50 AM', '7:05 AM', '7:20 AM'],
+          frequency: 'Every 12 minutes'
+        },
+        '89': {
+          stops: ['Dwarka Sector 21', 'Janakpuri West', 'Tilak Nagar', 'Karol Bagh', 'Rajendra Place', 'Connaught Place'],
+          timings: ['6:10 AM', '6:30 AM', '6:50 AM', '7:10 AM', '7:30 AM', '7:50 AM'],
+          frequency: 'Every 20 minutes'
+        }
+      };
+
+      const route = routeInfo[routeNumber];
+      if (route) {
+        alert(`Route ${routeNumber} Details:\n\nStops: ${route.stops.join(' → ')}\n\nFrequency: ${route.frequency}\n\nNext timings: ${route.timings.slice(0,3).join(', ')}`);
+      }
     }
 
     function updateLiveBusList() {
@@ -622,7 +671,7 @@
             </span>
           </div>
           <div class="bus-timing">
-            <div class="eta">Active</div>
+            <div class="eta">${bus.eta}</div>
             <p>Last update: Just now</p>
           </div>
         </div>
@@ -633,58 +682,9 @@
       }
     }
 
-    function loadRoutesList() {
-      const routesHtml = routes.map(route => `
-        <div class="item">
-          <div>
-            <div class="item-title">Route ${route.number}</div>
-            <div class="item-sub">${route.name}</div>
-          </div>
-          <div class="actions" style="display: flex; gap: 10px;">
-            <button class="btn btn-primary" onclick="editRoute('${route.number}')">
-              <i class="fas fa-edit"></i> Edit
-            </button>
-            <button class="btn btn-danger" onclick="deleteRoute('${route.number}')">
-              <i class="fas fa-trash"></i> Delete
-            </button>
-          </div>
-        </div>
-      `).join('');
-
-      if (document.getElementById('routesList')) {
-        document.getElementById('routesList').innerHTML = routesHtml;
-      }
-    }
-
-    function loadComplaintsList() {
-      const mockComplaints = [
-        { id: 1, title: 'Bus delay on Route 105', status: 'pending', time: '2 hours ago' },
-        { id: 2, title: 'Driver behavior complaint', status: 'resolved', time: '5 hours ago' },
-        { id: 3, title: 'Bus not stopping at designated stop', status: 'pending', time: '1 day ago' }
-      ];
-
-      const complaintsHtml = mockComplaints.map(complaint => `
-        <div class="item">
-          <div>
-            <div class="item-title">${complaint.title}</div>
-            <div class="item-sub">${complaint.time}</div>
-          </div>
-          <div class="status ${complaint.status}">
-            ${complaint.status.toUpperCase()}
-          </div>
-        </div>
-      `).join('');
-
-      if (document.getElementById('complaintsList')) {
-        document.getElementById('complaintsList').innerHTML = complaintsHtml;
-      }
-    }
-
     function toggleSidebar() {
       const sidebar = document.getElementById('sidebar');
-      const container = document.querySelector('.dashboard-container');
       sidebar.classList.toggle('open');
-      container.classList.toggle('sidebar-open');
     }
 
     function logout() {
@@ -692,67 +692,73 @@
       window.location.href = 'index.html';
     }
 
-    // Modal Functions
-    function showAddRouteModal() {
-      document.getElementById('addRouteModal').style.display = 'block';
-    }
+    function reportEmergency(type) {
+      const emergencyTypes = {
+        'medical': 'Medical Emergency',
+        'fire': 'Fire Emergency',
+        'security': 'Security Issue',
+        'breakdown': 'Bus Breakdown'
+      };
 
-    function closeAddRouteModal() {
-      document.getElementById('addRouteModal').style.display = 'none';
-    }
-
-    function showAlertModal() {
-      alert('Alert system would be integrated here. This would send notifications to all buses and passengers.');
-    }
-
-    function showEmergencyModal() {
-      alert('Emergency management system would be integrated here. This would show all active emergencies and allow quick response.');
-    }
-
-    function addRoute() {
-      const routeNumber = document.getElementById('routeNumber').value;
-      const routeName = document.getElementById('routeName').value;
-      const startPoint = document.getElementById('startPoint').value;
-      const endPoint = document.getElementById('endPoint').value;
-
-      if (routeNumber && routeName && startPoint && endPoint) {
-        routes.push({
-          number: routeNumber,
-          name: routeName,
-          start: startPoint,
-          end: endPoint
-        });
+      const confirmed = confirm(`Are you sure you want to report a ${emergencyTypes[type]}?\n\nThis will alert emergency services and nearby authorities.`);
+      
+      if (confirmed) {
+        alert(`${emergencyTypes[type]} reported successfully!\n\nEmergency ID: EMG${Date.now()}\nHelp is on the way.\n\nFor immediate assistance, call:\nPolice: 100\nAmbulance: 108\nFire: 101`);
         
-        loadRoutesList();
-        closeAddRouteModal();
-        alert('Route added successfully!');
-        
-        // Clear form
-        document.getElementById('routeNumber').value = '';
-        document.getElementById('routeName').value = '';
-        document.getElementById('startPoint').value = '';
-        document.getElementById('endPoint').value = '';
-      } else {
-        alert('Please fill in all fields.');
+        // Add to alerts list
+        const alertsContainer = document.getElementById('alertsList');
+        if (alertsContainer) {
+          const newAlert = `
+            <div class="item" style="background: #ffebee;">
+              <div>
+                <div class="item-title">${emergencyTypes[type]} reported</div>
+                <div class="item-sub">Just now</div>
+              </div>
+              <div class="status" style="background: #f44336; color: white; padding: 5px 10px; font-size: 12px;">
+                URGENT
+              </div>
+            </div>
+          `;
+          alertsContainer.insertAdjacentHTML('afterbegin', newAlert);
+        }
       }
     }
 
-    function editRoute(routeNumber) {
-      const route = routes.find(r => r.number === routeNumber);
-      if (route) {
-        document.getElementById('routeNumber').value = route.number;
-        document.getElementById('routeName').value = route.name;
-        document.getElementById('startPoint').value = route.start;
-        document.getElementById('endPoint').value = route.end;
-        showAddRouteModal();
-      }
+    function saveSettings() {
+      const settings = {
+        busArrivalNotif: document.getElementById('busArrivalNotif').checked,
+        routeChangeNotif: document.getElementById('routeChangeNotif').checked,
+        hapticFeedback: document.getElementById('hapticFeedback').checked,
+        preferredRoutes: document.getElementById('preferredRoutes').value,
+        homeLocation: document.getElementById('homeLocation').value,
+        workLocation: document.getElementById('workLocation').value
+      };
+
+      localStorage.setItem('userSettings', JSON.stringify(settings));
+      alert('Settings saved successfully!');
     }
 
-    function deleteRoute(routeNumber) {
-      if (confirm('Are you sure you want to delete this route?')) {
-        routes = routes.filter(r => r.number !== routeNumber);
-        loadRoutesList();
-        alert('Route deleted successfully!');
+    // Load saved settings
+    function loadSettings() {
+      const savedSettings = JSON.parse(localStorage.getItem('userSettings') || '{}');
+      
+      if (savedSettings.busArrivalNotif !== undefined) {
+        document.getElementById('busArrivalNotif').checked = savedSettings.busArrivalNotif;
+      }
+      if (savedSettings.routeChangeNotif !== undefined) {
+        document.getElementById('routeChangeNotif').checked = savedSettings.routeChangeNotif;
+      }
+      if (savedSettings.hapticFeedback !== undefined) {
+        document.getElementById('hapticFeedback').checked = savedSettings.hapticFeedback;
+      }
+      if (savedSettings.preferredRoutes) {
+        document.getElementById('preferredRoutes').value = savedSettings.preferredRoutes;
+      }
+      if (savedSettings.homeLocation) {
+        document.getElementById('homeLocation').value = savedSettings.homeLocation;
+      }
+      if (savedSettings.workLocation) {
+        document.getElementById('workLocation').value = savedSettings.workLocation;
       }
     }
 
@@ -817,39 +823,27 @@
       const lowerCommand = command.toLowerCase();
       let response = '';
 
-      if (lowerCommand.includes('show') && lowerCommand.includes('dashboard')) {
-        showPage('dashboard');
-        response = 'Showing dashboard page.';
-      } else if (lowerCommand.includes('show') && lowerCommand.includes('routes')) {
-        showPage('routes');
-        response = 'Showing routes management page.';
-      } else if (lowerCommand.includes('show') && (lowerCommand.includes('tracking') || lowerCommand.includes('live'))) {
+      if (lowerCommand.includes('find') && (lowerCommand.includes('bus') || lowerCommand.includes('route'))) {
+        response = 'Please use the search form to enter your starting location and destination, then I can help you find the best routes.';
+      } else if (lowerCommand.includes('show') && lowerCommand.includes('tracking')) {
         showPage('tracking');
-        response = 'Showing live tracking page.';
-      } else if (lowerCommand.includes('show') && lowerCommand.includes('complaints')) {
-        showPage('complaints');
-        response = 'Showing complaints management page.';
-      } else if (lowerCommand.includes('show') && lowerCommand.includes('settings')) {
-        showPage('settings');
-        response = 'Showing settings page.';
-      } else if (lowerCommand.includes('add') && lowerCommand.includes('route')) {
-        showAddRouteModal();
-        response = 'Opening add route modal.';
-      } else if (lowerCommand.includes('send') && lowerCommand.includes('alert')) {
-        showAlertModal();
-        response = 'Opening alert system.';
+        response = 'Showing live bus tracking page.';
+      } else if (lowerCommand.includes('show') && lowerCommand.includes('alerts')) {
+        showPage('alerts');
+        response = 'Showing alerts and notifications page.';
       } else if (lowerCommand.includes('emergency')) {
-        showEmergencyModal();
-        response = 'Opening emergency management.';
-      } else if (lowerCommand.includes('logout') || lowerCommand.includes('log out')) {
-        response = 'Logging you out...';
-        setTimeout(logout, 2000);
-      } else if (lowerCommand.includes('buses') || lowerCommand.includes('active')) {
-        response = `There are currently ${document.getElementById('activeBuses').textContent} active buses in the system.`;
-      } else if (lowerCommand.includes('passengers')) {
-        response = `Today we have ${document.getElementById('passengersToday').textContent} passengers using the bus system.`;
+        showPage('emergency');
+        response = 'Opening emergency support page. Please select the type of emergency you need help with.';
+      } else if (lowerCommand.includes('settings')) {
+        showPage('settings');
+        response = 'Opening settings page where you can customize your preferences.';
+      } else if (lowerCommand.includes('nearby') || lowerCommand.includes('near')) {
+        response = `There are currently ${document.getElementById('nearbyBuses').textContent} buses nearby. The average wait time is ${document.getElementById('avgWaitTime').textContent}.`;
+      } else if (lowerCommand.includes('home') || lowerCommand.includes('dashboard')) {
+        showPage('dashboard');
+        response = 'Showing main dashboard.';
       } else {
-        response = 'I can help you navigate the dashboard, manage routes, view tracking, check complaints, send alerts, or manage emergencies. What would you like to do?';
+        response = 'I can help you with: finding bus routes, showing live tracking, checking alerts, emergency support, or settings. What would you like to do?';
       }
 
       document.getElementById('voiceResponse').innerHTML = `<p><strong>You said:</strong> "${command}"</p><p><strong>Response:</strong> ${response}</p>`;
@@ -867,13 +861,19 @@
           if (Math.random() < 0.1) {
             bus.passengers = Math.max(0, Math.min(bus.capacity, bus.passengers + Math.floor(Math.random() * 10) - 5));
           }
+
+          // Update ETA
+          const etas = ['2 min', '5 min', '8 min', '12 min', '15 min'];
+          if (Math.random() < 0.2) {
+            bus.eta = etas[Math.floor(Math.random() * etas.length)];
+          }
         });
         
         updateLiveBusList();
       }
-    }, 10000);
+    }, 8000);
 
-    // Responsive design - mobile menu toggle
+    // Responsive design
     window.addEventListener('resize', function() {
       if (window.innerWidth <= 768) {
         document.getElementById('menuToggle').style.display = 'block';
@@ -882,7 +882,6 @@
         document.getElementById('sidebar').classList.remove('open');
       }
       
-      // Resize maps
       if (map) {
         setTimeout(() => map.invalidateSize(), 100);
       }
@@ -891,22 +890,20 @@
       }
     });
 
-    // Close modals when clicking outside
-    window.onclick = function(event) {
-      const voiceModal = document.getElementById('voiceModal');
-      const addRouteModal = document.getElementById('addRouteModal');
-      
-      if (event.target == voiceModal) {
-        closeVoiceModal();
-      }
-      if (event.target == addRouteModal) {
-        closeAddRouteModal();
-      }
-    }
+    // Load settings on page load
+    setTimeout(loadSettings, 1000);
 
     // Initialize mobile check
     if (window.innerWidth <= 768) {
       document.getElementById('menuToggle').style.display = 'block';
+    }
+
+    // Close modal when clicking outside
+    window.onclick = function(event) {
+      const voiceModal = document.getElementById('voiceModal');
+      if (event.target == voiceModal) {
+        closeVoiceModal();
+      }
     }
   </script>
 </body>

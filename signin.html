@@ -14,60 +14,354 @@
   />
 </head>
 <body>
+  <!-- Language Selector -->
+  <div class="language-selector">
+    <select id="languageSelect">
+      <option value="en">English</option>
+      <option value="hi">हिंदी</option>
+      <option value="pa">ਪੰਜਾਬੀ</option>
+    </select>
+  </div>
+
   <!-- Navbar -->
   <header class="navbar">
     <div class="logo">BusTrack</div>
     <nav>
-      <a href="index.html">Home</a>
+      <a href="index.html" data-translate="home">Home</a>
     </nav>
   </header>
 
   <!-- Signup Form Section -->
   <section class="login-section">
     <div class="login-card">
-      <h2>Signup</h2>
+      <h2 data-translate="signup">Signup</h2>
       <form id="signupForm">
         <div class="input-group">
           <i class="fa-solid fa-user"></i>
-          <input type="text" placeholder="Full Name" required>
+          <input type="text" id="fullName" placeholder="Full Name" required data-translate-placeholder="full_name">
         </div>
         <div class="input-group">
           <i class="fa-solid fa-envelope"></i>
-          <input type="email" placeholder="Email" required>
+          <input type="email" id="email" placeholder="Email" required data-translate-placeholder="email">
+        </div>
+        <div class="input-group">
+          <i class="fa-solid fa-phone"></i>
+          <input type="tel" id="phoneNumber" placeholder="Phone Number" required data-translate-placeholder="phone_number">
         </div>
         <div class="input-group">
           <i class="fa-solid fa-lock"></i>
-          <input type="password" placeholder="Password" required>
+          <input type="password" id="password" placeholder="Password" required data-translate-placeholder="password">
+        </div>
+        <div class="input-group">
+          <i class="fa-solid fa-lock"></i>
+          <input type="password" id="confirmPassword" placeholder="Confirm Password" required data-translate-placeholder="confirm_password">
         </div>
 
         <!-- Role Selection -->
         <div class="role-selection">
           <label>
-            <input type="radio" name="role" value="Commuter" checked> Commuter
+            <input type="radio" name="role" value="commuter" checked> 
+            <span data-translate="commuter">Commuter</span>
           </label>
           <label>
-            <input type="radio" name="role" value="Admin"> Admin
+            <input type="radio" name="role" value="admin"> 
+            <span data-translate="admin">Admin</span>
           </label>
         </div>
 
-        <button type="submit">Signup</button>
+        <button type="submit" data-translate="signup">Signup</button>
       </form>
-      <p class="signup-link">Already have an account? <a href="login.html">Login</a></p>
+      <p class="signup-link">
+        <span data-translate="have_account">Already have an account?</span> 
+        <a href="login.html" data-translate="login">Login</a>
+      </p>
     </div>
   </section>
 
   <!-- Footer -->
   <footer>
-    <a href="about.html">About</a>
-    <a href="contact.html">Contact</a>
-    <a href="faq.html">FAQ</a>
-    
+    <a href="about.html" data-translate="about">About</a>
+    <a href="contact.html" data-translate="contact">Contact</a>
+    <a href="faq.html" data-translate="faq">FAQ</a>
   </footer>
 
-  <button id="voice-btn" class="voice-button">
+  <!-- Voice Assistant Button -->
+  <button id="voice-btn" class="voice-button" onclick="toggleVoiceAssistant()">
     <i class="fa-solid fa-microphone"></i>
   </button>
 
+  <!-- Voice Assistant Modal -->
+  <div id="voiceModal" class="voice-modal">
+    <div class="voice-modal-content">
+      <div class="voice-modal-header">
+        <h3 data-translate="voice_assistant">Voice Assistant</h3>
+        <span class="close" onclick="closeVoiceModal()">&times;</span>
+      </div>
+      <div class="voice-modal-body">
+        <div id="voiceStatus" class="voice-status">
+          <i class="fa-solid fa-microphone"></i>
+          <p data-translate="click_speak">Click and speak...</p>
+        </div>
+        <div id="voiceResponse" class="voice-response"></div>
+      </div>
+    </div>
+  </div>
 
+  <script>
+    // Language translations
+    const translations = {
+      en: {
+        home: "Home",
+        signup: "Signup",
+        full_name: "Full Name",
+        email: "Email",
+        phone_number: "Phone Number",
+        password: "Password",
+        confirm_password: "Confirm Password",
+        commuter: "Commuter",
+        admin: "Admin",
+        have_account: "Already have an account?",
+        login: "Login",
+        about: "About",
+        contact: "Contact",
+        faq: "FAQ",
+        voice_assistant: "Voice Assistant",
+        click_speak: "Click and speak...",
+        signup_success: "Account created successfully!",
+        signup_error: "Please check your information and try again.",
+        please_fill: "Please fill in all fields.",
+        password_mismatch: "Passwords do not match.",
+        password_short: "Password must be at least 6 characters."
+      },
+      hi: {
+        home: "होम",
+        signup: "साइन अप",
+        full_name: "पूरा नाम",
+        email: "ईमेल",
+        phone_number: "फ़ोन नंबर",
+        password: "पासवर्ड",
+        confirm_password: "पासवर्ड की पुष्टि करें",
+        commuter: "यात्री",
+        admin: "एडमिन",
+        have_account: "पहले से खाता है?",
+        login: "लॉगिन",
+        about: "के बारे में",
+        contact: "संपर्क",
+        faq: "सामान्य प्रश्न",
+        voice_assistant: "वॉयस असिस्टेंट",
+        click_speak: "क्लिक करें और बोलें...",
+        signup_success: "खाता सफलतापूर्वक बनाया गया!",
+        signup_error: "कृपया अपनी जानकारी जांचें और दोबारा कोशिश करें।",
+        please_fill: "कृपया सभी फ़ील्ड भरें।",
+        password_mismatch: "पासवर्ड मेल नहीं खाते।",
+        password_short: "पासवर्ड कम से कम 6 अक्षरों का होना चाहिए।"
+      },
+      pa: {
+        home: "ਘਰ",
+        signup: "ਸਾਈਨ ਅੱਪ",
+        full_name: "ਪੂਰਾ ਨਾਮ",
+        email: "ਈਮੇਲ",
+        phone_number: "ਫ਼ੋਨ ਨੰਬਰ",
+        password: "ਪਾਸਵਰਡ",
+        confirm_password: "ਪਾਸਵਰਡ ਦੀ ਪੁਸ਼ਟੀ ਕਰੋ",
+        commuter: "ਯਾਤਰੀ",
+        admin: "ਐਡਮਿਨ",
+        have_account: "ਪਹਿਲਾਂ ਤੋਂ ਖਾਤਾ ਹੈ?",
+        login: "ਲੌਗਇਨ",
+        about: "ਬਾਰੇ",
+        contact: "ਸੰਪਰਕ",
+        faq: "ਆਮ ਸਵਾਲ",
+        voice_assistant: "ਵੌਇਸ ਸਹਾਇਕ",
+        click_speak: "ਕਲਿੱਕ ਕਰੋ ਅਤੇ ਬੋਲੋ...",
+        signup_success: "ਖਾਤਾ ਸਫਲਤਾਪੂਰਵਕ ਬਣਾਇਆ ਗਿਆ!",
+        signup_error: "ਕਿਰਪਾ ਕਰਕੇ ਆਪਣੀ ਜਾਣਕਾਰੀ ਚੈਕ ਕਰੋ ਅਤੇ ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ।",
+        please_fill: "ਕਿਰਪਾ ਕਰਕੇ ਸਾਰੇ ਖਾਨੇ ਭਰੋ।",
+        password_mismatch: "ਪਾਸਵਰਡ ਮੇਲ ਨਹੀਂ ਖਾਂਦੇ।",
+        password_short: "ਪਾਸਵਰਡ ਘੱਟੋ ਘੱਟ 6 ਅੱਖਰਾਂ ਦਾ ਹੋਣਾ ਚਾਹੀਦਾ ਹੈ।"
+      }
+    };
+
+    // Language functionality
+    function changeLanguage(lang) {
+      const elements = document.querySelectorAll('[data-translate]');
+      elements.forEach(element => {
+        const key = element.getAttribute('data-translate');
+        if (translations[lang] && translations[lang][key]) {
+          element.textContent = translations[lang][key];
+        }
+      });
+
+      // Handle placeholders
+      const placeholderElements = document.querySelectorAll('[data-translate-placeholder]');
+      placeholderElements.forEach(element => {
+        const key = element.getAttribute('data-translate-placeholder');
+        if (translations[lang] && translations[lang][key]) {
+          element.placeholder = translations[lang][key];
+        }
+      });
+
+      localStorage.setItem('selectedLanguage', lang);
+    }
+
+    // Initialize language
+    document.addEventListener('DOMContentLoaded', function() {
+      const savedLanguage = localStorage.getItem('selectedLanguage') || 'en';
+      document.getElementById('languageSelect').value = savedLanguage;
+      changeLanguage(savedLanguage);
+
+      document.getElementById('languageSelect').addEventListener('change', function() {
+        changeLanguage(this.value);
+      });
+
+      // Signup form functionality
+      document.getElementById('signupForm').addEventListener('submit', handleSignup);
+    });
+
+    // Handle signup form submission
+    function handleSignup(e) {
+      e.preventDefault();
+      
+      const fullName = document.getElementById('fullName').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const phoneNumber = document.getElementById('phoneNumber').value.trim();
+      const password = document.getElementById('password').value.trim();
+      const confirmPassword = document.getElementById('confirmPassword').value.trim();
+      const role = document.querySelector('input[name="role"]:checked').value;
+
+      if (!fullName || !email || !phoneNumber || !password || !confirmPassword) {
+        alert(translations[document.getElementById('languageSelect').value].please_fill);
+        return;
+      }
+
+      if (password.length < 6) {
+        alert(translations[document.getElementById('languageSelect').value].password_short);
+        return;
+      }
+
+      if (password !== confirmPassword) {
+        alert(translations[document.getElementById('languageSelect').value].password_mismatch);
+        return;
+      }
+
+      // Mock signup logic
+      if (fullName && email && phoneNumber && password) {
+        const user = {
+          name: fullName,
+          email: email,
+          phone: phoneNumber,
+          type: role,
+          avatar: fullName.charAt(0).toUpperCase()
+        };
+
+        // Save user session
+        sessionStorage.setItem('currentUser', JSON.stringify(user));
+        
+        alert(translations[document.getElementById('languageSelect').value].signup_success);
+
+        // Redirect to login page
+        setTimeout(() => {
+          window.location.href = 'login.html';
+        }, 2000);
+      } else {
+        alert(translations[document.getElementById('languageSelect').value].signup_error);
+      }
+    }
+
+    // Voice Assistant Functions
+    function toggleVoiceAssistant() {
+      document.getElementById('voiceModal').style.display = 'block';
+      startListening();
+    }
+
+    function closeVoiceModal() {
+      document.getElementById('voiceModal').style.display = 'none';
+      stopListening();
+    }
+
+    let recognition;
+    let isListening = false;
+
+    function startListening() {
+      if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+        recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+        recognition.lang = document.getElementById('languageSelect').value === 'hi' ? 'hi-IN' : 
+                         document.getElementById('languageSelect').value === 'pa' ? 'pa-IN' : 'en-US';
+        recognition.continuous = false;
+        recognition.interimResults = false;
+
+        recognition.onstart = function() {
+          isListening = true;
+          document.getElementById('voiceStatus').innerHTML = 
+            '<i class="fa-solid fa-microphone-lines"></i><p>Listening...</p>';
+        };
+
+        recognition.onresult = function(event) {
+          const transcript = event.results[0][0].transcript;
+          handleVoiceCommand(transcript);
+        };
+
+        recognition.onerror = function(event) {
+          document.getElementById('voiceResponse').innerHTML = 
+            '<p>Sorry, I couldn\'t understand. Please try again.</p>';
+        };
+
+        recognition.onend = function() {
+          isListening = false;
+          document.getElementById('voiceStatus').innerHTML = 
+            '<i class="fa-solid fa-microphone"></i><p>Click and speak...</p>';
+        };
+
+        recognition.start();
+      } else {
+        document.getElementById('voiceResponse').innerHTML = 
+          '<p>Voice recognition is not supported in your browser.</p>';
+      }
+    }
+
+    function stopListening() {
+      if (recognition && isListening) {
+        recognition.stop();
+      }
+    }
+
+    function handleVoiceCommand(command) {
+      const lowerCommand = command.toLowerCase();
+      let response = '';
+
+      if (lowerCommand.includes('fill') || lowerCommand.includes('signup')) {
+        // Auto-fill demo credentials
+        document.getElementById('fullName').value = 'John Doe';
+        document.getElementById('email').value = 'john@example.com';
+        document.getElementById('phoneNumber').value = '9876543210';
+        document.getElementById('password').value = 'demo123';
+        document.getElementById('confirmPassword').value = 'demo123';
+        response = 'I\'ve filled in demo information for you. You can now click signup.';
+      } else if (lowerCommand.includes('admin')) {
+        document.querySelector('input[value="admin"]').checked = true;
+        response = 'Admin role selected.';
+      } else if (lowerCommand.includes('commuter') || lowerCommand.includes('user')) {
+        document.querySelector('input[value="commuter"]').checked = true;
+        response = 'Commuter role selected.';
+      } else if (lowerCommand.includes('home')) {
+        response = 'Redirecting you to the home page...';
+        setTimeout(() => window.location.href = 'index.html', 2000);
+      } else if (lowerCommand.includes('login')) {
+        response = 'Redirecting you to the login page...';
+        setTimeout(() => window.location.href = 'login.html', 2000);
+      } else {
+        response = 'I can help you with: filling signup details, selecting user role, or navigating to other pages. What would you like to do?';
+      }
+
+      document.getElementById('voiceResponse').innerHTML = `<p><strong>You said:</strong> "${command}"</p><p><strong>Response:</strong> ${response}</p>`;
+    }
+
+    // Close modal when clicking outside
+    window.onclick = function(event) {
+      const voiceModal = document.getElementById('voiceModal');
+      if (event.target == voiceModal) {
+        closeVoiceModal();
+      }
+    }
+  </script>
 </body>
 </html>

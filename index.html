@@ -17,6 +17,15 @@
   />
 </head>
 <body>
+  <!-- Language Selector -->
+  <div class="language-selector">
+    <select id="languageSelect">
+      <option value="en">English</option>
+      <option value="hi">हिंदी</option>
+      <option value="pa">ਪੰਜਾਬੀ</option>
+    </select>
+  </div>
+
   <!-- Animated Bus Background -->
   <div class="bus-animation">
     <div class="bus">🚌</div> <!-- ✅ Keep main bus emoji -->
@@ -26,49 +35,293 @@
   <header class="navbar">
     <div class="logo">BusTrack</div>
     <nav>
-      <a href="login.html">Login</a>
-      <a href="signin.html">Signup</a>
+      <a href="login.html" data-translate="login">Login</a>
+      <a href="signin.html" data-translate="signup">Signup</a>
     </nav>
   </header>
 
   <!-- Hero Section -->
   <section class="hero">
-
-    <h1>Track your bus in real-time<br><span>anywhere, anytime</span></h1>
-    <button id="trackBtn">Track Bus</button>
+    <h1 data-translate="hero_title">Track your bus in real-time<br><span data-translate="hero_subtitle">anywhere, anytime</span></h1>
+    <button id="trackBtn" data-translate="track_bus">Track Bus</button>
   </section>
 
   <!-- Features Section -->
   <section class="features">
-    <div class="card">
-  <div class="icon"><i class="fa-solid fa-bus"></i></div>
-  <p>Live tracking</p>
-</div>
-<div class="card">
-  <div class="icon"><i class="fa-solid fa-bell"></i></div>
-  <p>Alerts</p>
-</div>
-<div class="card">
-  <div class="icon"><i class="fa-solid fa-search"></i></div>
-  <p>Lost & Found</p>
-</div>
-<div class="card">
-  <div class="icon"><i class="fa-solid fa-exclamation-triangle"></i></div>
-  <p>Emergency support</p>
-</div>
-
+    <div class="card" onclick="checkLoginAndRedirect('tracking')">
+      <div class="icon"><i class="fa-solid fa-bus"></i></div>
+      <p data-translate="live_tracking">Live tracking</p>
+    </div>
+    <div class="card" onclick="checkLoginAndRedirect('alerts')">
+      <div class="icon"><i class="fa-solid fa-bell"></i></div>
+      <p data-translate="alerts">Alerts</p>
+    </div>
+    <div class="card" onclick="checkLoginAndRedirect('lostandfound')">
+      <div class="icon"><i class="fa-solid fa-search"></i></div>
+      <p data-translate="lost_found">Lost & Found</p>
+    </div>
+    <div class="card" onclick="checkLoginAndRedirect('emergency')">
+      <div class="icon"><i class="fa-solid fa-exclamation-triangle"></i></div>
+      <p data-translate="emergency">Emergency support</p>
+    </div>
   </section>
 
   <!-- Footer -->
   <footer>
-    <a href="about.html">About</a>
-    <a href="contact.html">Contact</a>
-    <a href="faq.html">FAQ</a>
+    <a href="about.html" data-translate="about">About</a>
+    <a href="contact.html" data-translate="contact">Contact</a>
+    <a href="faq.html" data-translate="faq">FAQ</a>
   </footer>
 
-  <button id="voice-btn" class="voice-button">
+  <!-- Voice Assistant Button -->
+  <button id="voice-btn" class="voice-button" onclick="toggleVoiceAssistant()">
     <i class="fa-solid fa-microphone"></i>
   </button>
 
+  <!-- Voice Assistant Modal -->
+  <div id="voiceModal" class="voice-modal">
+    <div class="voice-modal-content">
+      <div class="voice-modal-header">
+        <h3 data-translate="voice_assistant">Voice Assistant</h3>
+        <span class="close" onclick="closeVoiceModal()">&times;</span>
+      </div>
+      <div class="voice-modal-body">
+        <div id="voiceStatus" class="voice-status">
+          <i class="fa-solid fa-microphone"></i>
+          <p data-translate="click_speak">Click and speak...</p>
+        </div>
+        <div id="voiceResponse" class="voice-response"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Authentication Check Modal -->
+  <div id="authModal" class="auth-modal">
+    <div class="auth-modal-content">
+      <div class="auth-modal-header">
+        <h3 data-translate="login_required">Login Required</h3>
+        <span class="close" onclick="closeAuthModal()">&times;</span>
+      </div>
+      <div class="auth-modal-body">
+        <p data-translate="login_message">Please login to access this feature.</p>
+        <div class="auth-modal-buttons">
+          <a href="login.html" class="btn btn-primary" data-translate="login">Login</a>
+          <a href="signin.html" class="btn btn-secondary" data-translate="signup">Sign Up</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Language translations
+    const translations = {
+      en: {
+        hero_title: "Track your bus in real-time",
+        hero_subtitle: "anywhere, anytime",
+        track_bus: "Track Bus",
+        live_tracking: "Live tracking",
+        alerts: "Alerts",
+        lost_found: "Lost & Found",
+        emergency: "Emergency support",
+        about: "About",
+        contact: "Contact",
+        faq: "FAQ",
+        login: "Login",
+        signup: "Signup",
+        voice_assistant: "Voice Assistant",
+        click_speak: "Click and speak...",
+        login_required: "Login Required",
+        login_message: "Please login to access this feature."
+      },
+      hi: {
+        hero_title: "अपनी बस को रियल-टाइम में ट्रैक करें",
+        hero_subtitle: "कहीं भी, कभी भी",
+        track_bus: "बस ट्रैक करें",
+        live_tracking: "लाइव ट्रैकिंग",
+        alerts: "अलर्ट",
+        lost_found: "खोया और मिला",
+        emergency: "आपातकालीन सहायता",
+        about: "के बारे में",
+        contact: "संपर्क",
+        faq: "सामान्य प्रश्न",
+        login: "लॉगिन",
+        signup: "साइन अप",
+        voice_assistant: "वॉयस असिस्टेंट",
+        click_speak: "क्लिक करें और बोलें...",
+        login_required: "लॉगिन आवश्यक",
+        login_message: "इस फीचर का उपयोग करने के लिए कृपया लॉगिन करें।"
+      },
+      pa: {
+        hero_title: "ਆਪਣੀ ਬੱਸ ਨੂੰ ਰੀਅਲ-ਟਾਈਮ ਵਿੱਚ ਟਰੈਕ ਕਰੋ",
+        hero_subtitle: "ਕਿਤੇ ਵੀ, ਕਦੇ ਵੀ",
+        track_bus: "ਬੱਸ ਟਰੈਕ ਕਰੋ",
+        live_tracking: "ਲਾਈਵ ਟਰੈਕਿੰਗ",
+        alerts: "ਚੇਤਾਵਨੀਆਂ",
+        lost_found: "ਗੁਆਚਿਆ ਅਤੇ ਮਿਲਿਆ",
+        emergency: "ਐਮਰਜੈਂਸੀ ਸਹਾਇਤਾ",
+        about: "ਬਾਰੇ",
+        contact: "ਸੰਪਰਕ",
+        faq: "ਆਮ ਸਵਾਲ",
+        login: "ਲੌਗਇਨ",
+        signup: "ਸਾਈਨ ਅੱਪ",
+        voice_assistant: "ਵੌਇਸ ਸਹਾਇਕ",
+        click_speak: "ਕਲਿੱਕ ਕਰੋ ਅਤੇ ਬੋਲੋ...",
+        login_required: "ਲੌਗਇਨ ਲੋੜੀਂਦਾ ਹੈ",
+        login_message: "ਇਸ ਫੀਚਰ ਦੀ ਵਰਤੋਂ ਕਰਨ ਲਈ ਕਿਰਪਾ ਕਰਕੇ ਲੌਗਇਨ ਕਰੋ।"
+      }
+    };
+
+    // Language functionality
+    function changeLanguage(lang) {
+      const elements = document.querySelectorAll('[data-translate]');
+      elements.forEach(element => {
+        const key = element.getAttribute('data-translate');
+        if (translations[lang] && translations[lang][key]) {
+          element.textContent = translations[lang][key];
+        }
+      });
+      localStorage.setItem('selectedLanguage', lang);
+    }
+
+    // Initialize language
+    document.addEventListener('DOMContentLoaded', function() {
+      const savedLanguage = localStorage.getItem('selectedLanguage') || 'en';
+      document.getElementById('languageSelect').value = savedLanguage;
+      changeLanguage(savedLanguage);
+
+      document.getElementById('languageSelect').addEventListener('change', function() {
+        changeLanguage(this.value);
+      });
+
+      // Track Bus button functionality
+      document.getElementById('trackBtn').addEventListener('click', function() {
+        checkLoginAndRedirect('tracking');
+      });
+    });
+
+    // Check if user is logged in
+    function isLoggedIn() {
+      return sessionStorage.getItem('currentUser') !== null;
+    }
+
+    // Check login and redirect
+    function checkLoginAndRedirect(feature) {
+      if (isLoggedIn()) {
+        const user = JSON.parse(sessionStorage.getItem('currentUser'));
+        if (user.type === 'admin') {
+          window.location.href = 'admindashboard.html';
+        } else {
+          window.location.href = 'dashboard.html';
+        }
+      } else {
+        showAuthModal();
+      }
+    }
+
+    // Show authentication modal
+    function showAuthModal() {
+      document.getElementById('authModal').style.display = 'block';
+    }
+
+    // Close authentication modal
+    function closeAuthModal() {
+      document.getElementById('authModal').style.display = 'none';
+    }
+
+    // Voice Assistant Functions
+    function toggleVoiceAssistant() {
+      document.getElementById('voiceModal').style.display = 'block';
+      startListening();
+    }
+
+    function closeVoiceModal() {
+      document.getElementById('voiceModal').style.display = 'none';
+      stopListening();
+    }
+
+    let recognition;
+    let isListening = false;
+
+    function startListening() {
+      if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+        recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+        recognition.lang = document.getElementById('languageSelect').value === 'hi' ? 'hi-IN' : 
+                         document.getElementById('languageSelect').value === 'pa' ? 'pa-IN' : 'en-US';
+        recognition.continuous = false;
+        recognition.interimResults = false;
+
+        recognition.onstart = function() {
+          isListening = true;
+          document.getElementById('voiceStatus').innerHTML = 
+            '<i class="fa-solid fa-microphone-lines"></i><p>Listening...</p>';
+        };
+
+        recognition.onresult = function(event) {
+          const transcript = event.results[0][0].transcript;
+          handleVoiceCommand(transcript);
+        };
+
+        recognition.onerror = function(event) {
+          document.getElementById('voiceResponse').innerHTML = 
+            '<p>Sorry, I couldn\'t understand. Please try again.</p>';
+        };
+
+        recognition.onend = function() {
+          isListening = false;
+          document.getElementById('voiceStatus').innerHTML = 
+            '<i class="fa-solid fa-microphone"></i><p>Click and speak...</p>';
+        };
+
+        recognition.start();
+      } else {
+        document.getElementById('voiceResponse').innerHTML = 
+          '<p>Voice recognition is not supported in your browser.</p>';
+      }
+    }
+
+    function stopListening() {
+      if (recognition && isListening) {
+        recognition.stop();
+      }
+    }
+
+    function handleVoiceCommand(command) {
+      const lowerCommand = command.toLowerCase();
+      let response = '';
+
+      if (lowerCommand.includes('track') || lowerCommand.includes('bus')) {
+        response = 'To track buses, please login first. I can redirect you to the login page.';
+      } else if (lowerCommand.includes('login')) {
+        response = 'Redirecting you to the login page...';
+        setTimeout(() => window.location.href = 'login.html', 2000);
+      } else if (lowerCommand.includes('about')) {
+        response = 'Redirecting you to the about page...';
+        setTimeout(() => window.location.href = 'about.html', 2000);
+      } else if (lowerCommand.includes('contact')) {
+        response = 'Redirecting you to the contact page...';
+        setTimeout(() => window.location.href = 'contact.html', 2000);
+      } else if (lowerCommand.includes('help') || lowerCommand.includes('faq')) {
+        response = 'Redirecting you to the FAQ page for help...';
+        setTimeout(() => window.location.href = 'faq.html', 2000);
+      } else {
+        response = 'I can help you with: tracking buses, login, about us, contact, or FAQ. What would you like to know?';
+      }
+
+      document.getElementById('voiceResponse').innerHTML = `<p><strong>You said:</strong> "${command}"</p><p><strong>Response:</strong> ${response}</p>`;
+    }
+
+    // Close modals when clicking outside
+    window.onclick = function(event) {
+      const authModal = document.getElementById('authModal');
+      const voiceModal = document.getElementById('voiceModal');
+      
+      if (event.target == authModal) {
+        closeAuthModal();
+      }
+      if (event.target == voiceModal) {
+        closeVoiceModal();
+      }
+    }
+  </script>
 </body>
 </html>
