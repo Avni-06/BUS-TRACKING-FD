@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,14 +8,12 @@
   <link rel="stylesheet" href="style.css">
   <script defer src="script.js"></script>
   <!-- Font Awesome for icons -->
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
-  />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <!-- Leaflet for maps -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 </head>
+
 <body class="dashboard-body">
   <!-- Language Selector -->
   <div class="language-selector">
@@ -58,7 +57,8 @@
       <!-- Navbar -->
       <header class="navbar">
         <div class="header-left">
-          <button class="menu-toggle" id="menuToggle" style="background: none; border: none; color: white; font-size: 18px; margin-right: 15px; cursor: pointer; display: none;">
+          <button class="menu-toggle" id="menuToggle"
+            style="background: none; border: none; color: white; font-size: 18px; margin-right: 15px; cursor: pointer; display: none;">
             <i class="fas fa-bars"></i>
           </button>
           <h1 id="pageTitle" data-translate="dashboard">Dashboard</h1>
@@ -103,11 +103,13 @@
             <div class="route-inputs">
               <div class="input-group-route">
                 <label data-translate="from">From</label>
-                <input type="text" id="fromLocation" data-translate-placeholder="enter_start" placeholder="Enter starting location">
+                <input type="text" id="fromLocation" data-translate-placeholder="enter_start"
+                  placeholder="Enter starting location">
               </div>
               <div class="input-group-route">
                 <label data-translate="to">To</label>
-                <input type="text" id="toLocation" data-translate-placeholder="enter_dest" placeholder="Enter destination">
+                <input type="text" id="toLocation" data-translate-placeholder="enter_dest"
+                  placeholder="Enter destination">
               </div>
               <button class="search-route-btn" onclick="searchRoutes()" data-translate="search">
                 <i class="fas fa-search"></i> Search
@@ -136,7 +138,8 @@
 
           <!-- Bus Results -->
           <div class="bus-results" id="busResults" style="display: none;">
-            <h3 style="padding: 20px; border-bottom: 1px solid #e0e0e0;" data-translate="available_routes">Available Routes</h3>
+            <h3 style="padding: 20px; border-bottom: 1px solid #e0e0e0;" data-translate="available_routes">Available
+              Routes</h3>
             <div id="busResultsList">
               <!-- Bus results will be populated here -->
             </div>
@@ -149,7 +152,8 @@
             <div id="trackingMap"></div>
           </div>
           <div class="bus-results">
-            <h3 style="padding: 20px; border-bottom: 1px solid #e0e0e0;" data-translate="live_buses">Live Bus Locations</h3>
+            <h3 style="padding: 20px; border-bottom: 1px solid #e0e0e0;" data-translate="live_buses">Live Bus Locations
+            </h3>
             <div id="liveBusList">
               <!-- Live bus data will be populated here -->
             </div>
@@ -170,20 +174,28 @@
         <div id="emergencyPage" class="page">
           <div class="form-card">
             <h2 data-translate="emergency_support">Emergency Support</h2>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-top: 20px;">
-              <button class="btn btn-danger" onclick="reportEmergency('medical')" style="padding: 20px; display: flex; flex-direction: column; align-items: center;">
+            <div
+              style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-top: 20px;">
+              <button class="btn btn-danger" onclick="reportEmergency('medical')"
+                style="padding: 20px; display: flex; flex-direction: column; align-items: center;">
                 <i class="fas fa-ambulance" style="font-size: 30px; margin-bottom: 10px;"></i>
                 <span data-translate="medical_emergency">Medical Emergency</span>
               </button>
-              <button class="btn" style="background: #fd7e14; padding: 20px; display: flex; flex-direction: column; align-items: center;" onclick="reportEmergency('fire')">
+              <button class="btn"
+                style="background: #fd7e14; padding: 20px; display: flex; flex-direction: column; align-items: center;"
+                onclick="reportEmergency('fire')">
                 <i class="fas fa-fire" style="font-size: 30px; margin-bottom: 10px;"></i>
                 <span data-translate="fire_emergency">Fire Emergency</span>
               </button>
-              <button class="btn" style="background: #6f42c1; padding: 20px; display: flex; flex-direction: column; align-items: center;" onclick="reportEmergency('security')">
+              <button class="btn"
+                style="background: #6f42c1; padding: 20px; display: flex; flex-direction: column; align-items: center;"
+                onclick="reportEmergency('security')">
                 <i class="fas fa-shield-alt" style="font-size: 30px; margin-bottom: 10px;"></i>
                 <span data-translate="security_issue">Security Issue</span>
               </button>
-              <button class="btn" style="background: #20c997; padding: 20px; display: flex; flex-direction: column; align-items: center;" onclick="reportEmergency('breakdown')">
+              <button class="btn"
+                style="background: #20c997; padding: 20px; display: flex; flex-direction: column; align-items: center;"
+                onclick="reportEmergency('breakdown')">
                 <i class="fas fa-tools" style="font-size: 30px; margin-bottom: 10px;"></i>
                 <span data-translate="bus_breakdown">Bus Breakdown</span>
               </button>
@@ -352,7 +364,7 @@
     };
 
     // Initialize dashboard
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
       checkAuthStatus();
       initializeLanguage();
       initializeMaps();
@@ -375,7 +387,7 @@
       document.getElementById('languageSelect').value = savedLanguage;
       changeLanguage(savedLanguage);
 
-      document.getElementById('languageSelect').addEventListener('change', function() {
+      document.getElementById('languageSelect').addEventListener('change', function () {
         changeLanguage(this.value);
       });
     }
@@ -408,20 +420,20 @@
       // Main dashboard map
       if (document.getElementById('map')) {
         map = L.map('map').setView([28.6139, 77.2090], 12);
-        
+
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
           attribution: '© OpenStreetMap contributors'
         }).addTo(map);
-        
+
         addSampleBuses();
       }
 
       // Get user location if available
       if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function(position) {
+        navigator.geolocation.getCurrentPosition(function (position) {
           const lat = position.coords.latitude;
           const lng = position.coords.longitude;
-          
+
           if (map) {
             map.setView([lat, lng], 14);
             L.marker([lat, lng]).addTo(map)
@@ -435,11 +447,11 @@
     function initializeTrackingMap() {
       if (!trackingMap && document.getElementById('trackingMap')) {
         trackingMap = L.map('trackingMap').setView([28.6139, 77.2090], 12);
-        
+
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
           attribution: '© OpenStreetMap contributors'
         }).addTo(trackingMap);
-        
+
         addSampleBuses(trackingMap);
         updateLiveBusList();
       }
@@ -527,16 +539,19 @@
       // Hide all pages
       document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
       document.querySelectorAll('.sidebar-nav a').forEach(link => link.classList.remove('active'));
-      
+
       // Show selected page
       const pageElement = document.getElementById(page + 'Page');
       if (pageElement) {
         pageElement.classList.add('active');
       }
-      
-      // Update active menu item
-      event.target.classList.add('active');
-      
+
+      // Update active menu item - find the clicked element
+      const clickedLink = document.querySelector(`[onclick="showPage('${page}')"]`);
+      if (clickedLink) {
+        clickedLink.classList.add('active');
+      }
+
       // Update page title
       const pageTitles = {
         'dashboard': translations[document.getElementById('languageSelect').value]?.dashboard || 'Dashboard',
@@ -546,9 +561,9 @@
         'settings': translations[document.getElementById('languageSelect').value]?.settings || 'Settings'
       };
       document.getElementById('pageTitle').textContent = pageTitles[page] || 'Dashboard';
-      
+
       currentPage = page;
-      
+
       // Initialize page-specific content
       if (page === 'tracking') {
         setTimeout(initializeTrackingMap, 100);
@@ -579,32 +594,32 @@
       // Simulate API call with realistic data
       setTimeout(() => {
         const mockResults = [
-          { 
-            route: '105', 
-            from: from, 
-            to: to, 
-            eta: '12 min', 
-            duration: '35 min', 
+          {
+            route: '105',
+            from: from,
+            to: to,
+            eta: '12 min',
+            duration: '35 min',
             crowd: 'low',
             stops: ['ISBT', 'Red Fort', 'Connaught Place', 'India Gate'],
             fare: '₹15'
           },
-          { 
-            route: '120', 
-            from: from, 
-            to: to, 
-            eta: '8 min', 
-            duration: '28 min', 
+          {
+            route: '120',
+            from: from,
+            to: to,
+            eta: '8 min',
+            duration: '28 min',
             crowd: 'medium',
             stops: ['Karol Bagh', 'Connaught Place', 'Khan Market', 'Lajpat Nagar'],
             fare: '₹12'
           },
-          { 
-            route: '89', 
-            from: from, 
-            to: to, 
-            eta: '15 min', 
-            duration: '42 min', 
+          {
+            route: '89',
+            from: from,
+            to: to,
+            eta: '15 min',
+            duration: '42 min',
             crowd: 'high',
             stops: ['Dwarka', 'Janakpuri', 'Karol Bagh', 'Connaught Place'],
             fare: '₹18'
@@ -656,7 +671,7 @@
 
       const route = routeInfo[routeNumber];
       if (route) {
-        alert(`Route ${routeNumber} Details:\n\nStops: ${route.stops.join(' → ')}\n\nFrequency: ${route.frequency}\n\nNext timings: ${route.timings.slice(0,3).join(', ')}`);
+        alert(`Route ${routeNumber} Details:\n\nStops: ${route.stops.join(' → ')}\n\nFrequency: ${route.frequency}\n\nNext timings: ${route.timings.slice(0, 3).join(', ')}`);
       }
     }
 
@@ -666,8 +681,8 @@
           <div class="bus-info">
             <h4>Bus ${bus.route} (${bus.id})</h4>
             <p>Passengers: ${bus.passengers}/${bus.capacity}</p>
-            <span class="crowd-indicator crowd-${bus.passengers/bus.capacity > 0.7 ? 'high' : bus.passengers/bus.capacity > 0.5 ? 'medium' : 'low'}">
-              ${bus.passengers/bus.capacity > 0.7 ? 'HIGH' : bus.passengers/bus.capacity > 0.5 ? 'MEDIUM' : 'LOW'} CROWD
+            <span class="crowd-indicator crowd-${bus.passengers / bus.capacity > 0.7 ? 'high' : bus.passengers / bus.capacity > 0.5 ? 'medium' : 'low'}">
+              ${bus.passengers / bus.capacity > 0.7 ? 'HIGH' : bus.passengers / bus.capacity > 0.5 ? 'MEDIUM' : 'LOW'} CROWD
             </span>
           </div>
           <div class="bus-timing">
@@ -701,10 +716,10 @@
       };
 
       const confirmed = confirm(`Are you sure you want to report a ${emergencyTypes[type]}?\n\nThis will alert emergency services and nearby authorities.`);
-      
+
       if (confirmed) {
         alert(`${emergencyTypes[type]} reported successfully!\n\nEmergency ID: EMG${Date.now()}\nHelp is on the way.\n\nFor immediate assistance, call:\nPolice: 100\nAmbulance: 108\nFire: 101`);
-        
+
         // Add to alerts list
         const alertsContainer = document.getElementById('alertsList');
         if (alertsContainer) {
@@ -741,7 +756,7 @@
     // Load saved settings
     function loadSettings() {
       const savedSettings = JSON.parse(localStorage.getItem('userSettings') || '{}');
-      
+
       if (savedSettings.busArrivalNotif !== undefined) {
         document.getElementById('busArrivalNotif').checked = savedSettings.busArrivalNotif;
       }
@@ -779,36 +794,36 @@
     function startListening() {
       if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
         recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-        recognition.lang = document.getElementById('languageSelect').value === 'hi' ? 'hi-IN' : 
-                         document.getElementById('languageSelect').value === 'pa' ? 'pa-IN' : 'en-US';
+        recognition.lang = document.getElementById('languageSelect').value === 'hi' ? 'hi-IN' :
+          document.getElementById('languageSelect').value === 'pa' ? 'pa-IN' : 'en-US';
         recognition.continuous = false;
         recognition.interimResults = false;
 
-        recognition.onstart = function() {
+        recognition.onstart = function () {
           isListening = true;
-          document.getElementById('voiceStatus').innerHTML = 
+          document.getElementById('voiceStatus').innerHTML =
             '<i class="fa-solid fa-microphone-lines"></i><p>Listening...</p>';
         };
 
-        recognition.onresult = function(event) {
+        recognition.onresult = function (event) {
           const transcript = event.results[0][0].transcript;
           handleVoiceCommand(transcript);
         };
 
-        recognition.onerror = function(event) {
-          document.getElementById('voiceResponse').innerHTML = 
+        recognition.onerror = function (event) {
+          document.getElementById('voiceResponse').innerHTML =
             '<p>Sorry, I couldn\'t understand. Please try again.</p>';
         };
 
-        recognition.onend = function() {
+        recognition.onend = function () {
           isListening = false;
-          document.getElementById('voiceStatus').innerHTML = 
+          document.getElementById('voiceStatus').innerHTML =
             '<i class="fa-solid fa-microphone"></i><p>Click and speak...</p>';
         };
 
         recognition.start();
       } else {
-        document.getElementById('voiceResponse').innerHTML = 
+        document.getElementById('voiceResponse').innerHTML =
           '<p>Voice recognition is not supported in your browser.</p>';
       }
     }
@@ -856,7 +871,7 @@
           // Slightly move buses to simulate movement
           bus.lat += (Math.random() - 0.5) * 0.001;
           bus.lng += (Math.random() - 0.5) * 0.001;
-          
+
           // Update passenger count occasionally
           if (Math.random() < 0.1) {
             bus.passengers = Math.max(0, Math.min(bus.capacity, bus.passengers + Math.floor(Math.random() * 10) - 5));
@@ -868,20 +883,20 @@
             bus.eta = etas[Math.floor(Math.random() * etas.length)];
           }
         });
-        
+
         updateLiveBusList();
       }
     }, 8000);
 
     // Responsive design
-    window.addEventListener('resize', function() {
+    window.addEventListener('resize', function () {
       if (window.innerWidth <= 768) {
         document.getElementById('menuToggle').style.display = 'block';
       } else {
         document.getElementById('menuToggle').style.display = 'none';
         document.getElementById('sidebar').classList.remove('open');
       }
-      
+
       if (map) {
         setTimeout(() => map.invalidateSize(), 100);
       }
@@ -899,7 +914,7 @@
     }
 
     // Close modal when clicking outside
-    window.onclick = function(event) {
+    window.onclick = function (event) {
       const voiceModal = document.getElementById('voiceModal');
       if (event.target == voiceModal) {
         closeVoiceModal();
@@ -907,4 +922,5 @@
     }
   </script>
 </body>
+
 </html>

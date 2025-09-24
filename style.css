@@ -2,14 +2,14 @@
 :root {
   --primary-color: #2a6282ea;
   --secondary-color: #ff8000;
-  --voice-color:#85c0d2de;
+  --voice-color: #85c0d2de;
   --text-color: #222;
   --card-bg: #a2d8e8b6;
   --footer-bg: var(--primary-color);
 
-  --shadow-light: 0px 4px 8px rgba(0,0,0,0.1);
-  --shadow-medium: 0px 6px 15px rgba(0,0,0,0.3);
-  --shadow-strong: 0px 8px 18px rgba(0,0,0,0.2);
+  --shadow-light: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  --shadow-medium: 0px 6px 15px rgba(0, 0, 0, 0.3);
+  --shadow-strong: 0px 8px 18px rgba(0, 0, 0, 0.2);
 
   --radius-small: 10px;
   --radius-medium: 15px;
@@ -35,7 +35,7 @@ body {
 
   /* Base background */
   background: url("image/cloud.jpg") no-repeat center center/cover;
-  background-attachment: fixed; 
+  background-attachment: fixed;
   animation: zoomBg 12s ease-in-out infinite alternate;
   opacity: 1;
 }
@@ -45,6 +45,7 @@ body {
   from {
     background-size: 100% 100%;
   }
+
   to {
     background-size: 150% 150%;
   }
@@ -75,7 +76,8 @@ body {
   right: 0;
   width: 100%;
   height: 20px;
-  pointer-events: none; /* clickable UI remains usable */
+  pointer-events: none;
+  /* clickable UI remains usable */
   z-index: -1;
 }
 
@@ -91,6 +93,7 @@ body {
   from {
     right: -120px;
   }
+
   to {
     right: 100%;
   }
@@ -166,31 +169,55 @@ body {
 }
 
 /* Features Section */
+/* Features Section */
 .features {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: 20px;
-  padding: 20px 20px;
+  overflow: hidden;
+  width: 100%;
+  background: transparent;
+}
+
+.features .h4 {
+  background-color: var(--card-bg);
+}
+
+.slider {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+.slider-track {
+  display: flex;
+  width: max-content;
+  animation: scroll 30s linear infinite;
 }
 
 .card {
-  background: var(--card-bg);
+  flex: 0 0 auto;
+  width: 250px;
+  margin: 10px;
   padding: 20px;
-  border-radius: var(--radius-medium);
-  box-shadow: var(--shadow-light);
-  transition: transform 0.3s, box-shadow 0.3s;
-  cursor: pointer;
-}
+  background: transparent;
+  border: 2px solid #ccc;
+  border-radius: 10px;
+  text-align: center;
+  color: #333;
 
-.card:hover {
-  transform: translateY(-10px);
-  box-shadow: var(--shadow-strong);
 }
 
 .icon {
-  font-size: 2rem;
+  font-size: 24px;
   margin-bottom: 10px;
-  color: var(--primary-color);
+}
+
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
 }
 
 /* Footer */
@@ -267,7 +294,8 @@ footer a:hover {
 }
 
 /* ================= Modal Styles ================= */
-.auth-modal, .voice-modal {
+.auth-modal,
+.voice-modal {
   display: none;
   position: fixed;
   z-index: 10000;
@@ -276,10 +304,11 @@ footer a:hover {
   width: 100%;
   height: 100%;
   overflow: auto;
-  background-color: rgba(0,0,0,0.4);
+  background-color: rgba(0, 0, 0, 0.4);
 }
 
-.auth-modal-content, .voice-modal-content {
+.auth-modal-content,
+.voice-modal-content {
   background-color: white;
   margin: 15% auto;
   padding: 0;
@@ -289,7 +318,8 @@ footer a:hover {
   box-shadow: var(--shadow-strong);
 }
 
-.auth-modal-header, .voice-modal-header {
+.auth-modal-header,
+.voice-modal-header {
   background: var(--primary-color);
   color: white;
   padding: 20px;
@@ -299,7 +329,8 @@ footer a:hover {
   align-items: center;
 }
 
-.auth-modal-body, .voice-modal-body {
+.auth-modal-body,
+.voice-modal-body {
   padding: 20px;
 }
 
@@ -674,7 +705,8 @@ team-container {
   transition: background 0.3s ease;
 }
 
-.sidebar-nav a:hover, .sidebar-nav a.active {
+.sidebar-nav a:hover,
+.sidebar-nav a.active {
   background: rgba(0, 0, 0, 0.15);
 }
 
@@ -819,10 +851,11 @@ body.dashboard-body {
 }
 
 /* Card Style */
-.form-card, .list-card {
+.form-card,
+.list-card {
   background: white;
   border-radius: 15px;
-  box-shadow: 0px 6px 15px rgba(0,0,0,0.1);
+  box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.1);
   padding: 25px;
   width: 100%;
   max-width: 500px;
@@ -1021,7 +1054,8 @@ h2 {
   position: relative;
 }
 
-#map, #trackingMap {
+#map,
+#trackingMap {
   height: 100%;
   width: 100%;
 }
@@ -1050,6 +1084,44 @@ h2 {
   height: 15px;
   margin-right: 8px;
   border-radius: 3px;
+}
+
+
+/* ================= Page Display Fix ================= */
+.page {
+  display: none;
+}
+
+.page.active {
+  display: block !important;
+}
+
+/* Make sure all page content is visible when active */
+#dashboardPage.active,
+#trackingPage.active,
+#alertsPage.active,
+#emergencyPage.active,
+#settingsPage.active {
+  display: block !important;
+}
+
+/* Ensure proper content area styling */
+.content-area {
+  width: 100%;
+  height: 100%;
+}
+
+/* Fix for tracking map visibility */
+#trackingPage .map-container {
+  width: 100%;
+  height: 70vh;
+  display: block;
+}
+
+#trackingMap {
+  width: 100%;
+  height: 100%;
+  display: block;
 }
 
 /* Bus Results */
@@ -1105,19 +1177,19 @@ h2 {
 }
 
 /* Red heatmap shades as requested */
-.crowd-low { 
-  background: #ffebee; 
-  color: #c62828; 
+.crowd-low {
+  background: #ffebee;
+  color: #c62828;
 }
 
-.crowd-medium { 
-  background: #ffcdd2; 
-  color: #d32f2f; 
+.crowd-medium {
+  background: #ffcdd2;
+  color: #d32f2f;
 }
 
-.crowd-high { 
-  background: #ef9a9a; 
-  color: #b71c1c; 
+.crowd-high {
+  background: #ef9a9a;
+  color: #b71c1c;
 }
 
 /* Stats Grid */
@@ -1170,8 +1242,13 @@ h2 {
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 /* ================= Responsive Design ================= */
@@ -1180,7 +1257,7 @@ h2 {
     top: 10px;
     right: 10px;
   }
-  
+
   .route-inputs {
     grid-template-columns: 1fr;
     gap: 15px;

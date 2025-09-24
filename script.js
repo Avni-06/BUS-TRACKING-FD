@@ -6,7 +6,60 @@ trackBtn.addEventListener("click", () => {
   window.location.href = "tracking.html"; // Example page
 });
 
+function showPage(page) {
+  // Hide all pages
+  document.querySelectorAll('.page').forEach(p => {
+    p.classList.remove('active');
+    p.style.display = 'none'; // Explicitly hide
+  });
+  
+  // Remove active class from all sidebar links
+  document.querySelectorAll('.sidebar-nav a').forEach(link => {
+    link.classList.remove('active');
+  });
 
+  // Show selected page
+  const pageElement = document.getElementById(page + 'Page');
+  if (pageElement) {
+    pageElement.classList.add('active');
+    pageElement.style.display = 'block'; // Explicitly show
+  }
+
+  // Update active menu item - find the clicked element
+  const clickedLink = document.querySelector(`[onclick="showPage('${page}')"]`);
+  if (clickedLink) {
+    clickedLink.classList.add('active');
+  }
+
+  // Update page title
+  const pageTitles = {
+    'dashboard': translations[document.getElementById('languageSelect').value]?.dashboard || 'Dashboard',
+    'tracking': translations[document.getElementById('languageSelect').value]?.live_tracking || 'Live Tracking',
+    'alerts': translations[document.getElementById('languageSelect').value]?.alerts || 'Alerts & Notifications',
+    'emergency': translations[document.getElementById('languageSelect').value]?.emergency || 'Emergency Support',
+    'settings': translations[document.getElementById('languageSelect').value]?.settings || 'Settings'
+  };
+  document.getElementById('pageTitle').textContent = pageTitles[page] || 'Dashboard';
+
+  currentPage = page;
+
+  // Initialize page-specific content
+  if (page === 'tracking') {
+    setTimeout(() => {
+      initializeTrackingMap();
+      // Force map resize
+      if (trackingMap) {
+        trackingMap.invalidateSize();
+      }
+    }, 200);
+  }
+
+  // Close mobile sidebar after selection
+  if (window.innerWidth <= 768) {
+    const sidebar = document.getElementById('sidebar');
+    sidebar.classList.remove('open');
+  }
+}
 
 // Login form submit
 const loginForm = document.getElementById("loginForm");

@@ -47,24 +47,48 @@
   </section>
 
   <!-- Features Section -->
-  <section class="features">
-    <div class="card" onclick="checkLoginAndRedirect('tracking')">
-      <div class="icon"><i class="fa-solid fa-bus"></i></div>
-      <p data-translate="live_tracking">Live tracking</p>
+  <!-- Features Section -->
+ <section class="features">
+  <div class="slider">
+    <h4>Features</h4>
+    <div class="slider-track">
+      <div class="card">
+        <div class="icon"><i class="fa-solid fa-bus"></i></div>
+        <p>Live Bus tracking</p>
+      </div>
+      <div class="card">
+        <div class="icon"><i class="fa-solid fa-users"></i></div>
+        <p>Passengers count / CROWD</p>
+      </div>
+      <div class="card">
+        <div class="icon"><i class="fa-solid fa-phone-volume"></i></div>
+        <p>Offline Call Helpline Integration</p>
+      </div>
+      <div class="card">
+        <div class="icon"><i class="fa-solid fa-box-open"></i></div>
+        <p>Lost & Found</p>
+      </div>
+
+      <!-- Repeat cards for seamless loop -->
+      <div class="card">
+        <div class="icon"><i class="fa-solid fa-bus"></i></div>
+        <p>Live Bus tracking</p>
+      </div>
+      <div class="card">
+        <div class="icon"><i class="fa-solid fa-users"></i></div>
+        <p>Passengers count / CROWD</p>
+      </div>
+      <div class="card">
+        <div class="icon"><i class="fa-solid fa-phone-volume"></i></div>
+        <p>Offline Call Helpline Integration</p>
+      </div>
+      <div class="card">
+        <div class="icon"><i class="fa-solid fa-box-open"></i></div>
+        <p>Lost & Found</p>
+      </div>
     </div>
-    <div class="card" onclick="checkLoginAndRedirect('alerts')">
-      <div class="icon"><i class="fa-solid fa-bell"></i></div>
-      <p data-translate="alerts">Alerts</p>
-    </div>
-    <div class="card" onclick="checkLoginAndRedirect('lostandfound')">
-      <div class="icon"><i class="fa-solid fa-search"></i></div>
-      <p data-translate="lost_found">Lost & Found</p>
-    </div>
-    <div class="card" onclick="checkLoginAndRedirect('emergency')">
-      <div class="icon"><i class="fa-solid fa-exclamation-triangle"></i></div>
-      <p data-translate="emergency">Emergency support</p>
-    </div>
-  </section>
+  </div>
+</section>
 
   <!-- Footer -->
   <footer>
@@ -99,7 +123,7 @@
   <div id="authModal" class="auth-modal">
     <div class="auth-modal-content">
       <div class="auth-modal-header">
-        <h3 data-translate="login_required">Login Required</h3>
+        <h3 data-t,ranslate="login_required">Login Required</h3>
         <span class="close" onclick="closeAuthModal()">&times;</span>
       </div>
       <div class="auth-modal-body">
